@@ -2,10 +2,11 @@ require 'rubygems'
 require 'data_mapper'
 require 'dm-sqlite-adapter'
 require 'bcrypt'
+require 'dotenv'
 #require 'dm-mysql-adapter'
 
-#DataMapper.setup(:default, "sqlite://#{Dir.pwd}/db.sqlite")
-DataMapper.setup(:default, "mysql://root:@localhost/imgdb")
+Dotenv.load
+DataMapper.setup(:default, ENV['SQL_SETTING'])
 
 class User
   include DataMapper::Resource

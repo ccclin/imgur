@@ -1,18 +1,21 @@
 require 'rubygems'
 require 'sinatra'
-require "sinatra/json"
+require 'sinatra/json'
 require 'json'
 require 'bundler'
 require 'fileutils'
-require "sinatra/logger"
+require 'sinatra/logger'
+require 'dotenv'
 Bundler.require
 
 # load the Database and User model
 require './model'
 
+Dotenv.load
+
 FUNCTION_SUCCESS = "success"
 FUNCTION_FAILED = "error"
-IMAGE_FOLDER = "/ROR/image/"
+IMAGE_FOLDER = ENV['IMAGE_FOLDER']
 
 Warden::Strategies.add(:password) do
   def valid?
@@ -391,7 +394,8 @@ class SinatraImgur < Sinatra::Base
     if File.exists?(lastImg.path_name)
       content = File.read(lastImg.path_name)
       logger.info("SUCCESS, #{lastImg.path_name}")
-      imagetime = lastImg.createdate.strftime("%Y-%m-%d-%T")
+      # imagetime = lastImg.createdate.strftime("%Y-%m-%d-%T")
+      imagetime = lastImg.createdate.strftime("%Y/%m/%d %H:%M:%S")
       return { :result => FUNCTION_SUCCESS, :imagetime => imagetime, :content => content }.to_json
     else
       return_message = "Image file #{lastImg.path_name} not exist!!"
@@ -423,7 +427,7 @@ class SinatraImgur < Sinatra::Base
     
     if File.exists?(lastImg.path_name)
       logger.info("SUCCESS, #{lastImg.path_name}")
-      return { :result => FUNCTION_SUCCESS, :imageurl => "/images/upload/#{user}/#{album}/#{lastImg.filename}", :imagetime => lastImg.createdate }.to_json
+      return { :result => FUNCTION_SUCCESS, :imageurl => "/images/upload/#{user}/#{album}/#{lastImg.filename}", :imagetime => lastImg.createdate.strftime("%Y/%m/%d %H:%M:%S") }.to_json
     else
       return_message = "Image file #{lastImg.path_name} not exist!!"
       lastImg.destroy

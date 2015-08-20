@@ -12,4 +12,4 @@ gem 'sinatra-logger'
 gem 'do_mysql', '0.10.16'
 gem 'thin'
 gem 'unicorn'
-
+gem 'dotenv'

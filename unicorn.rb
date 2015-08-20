@@ -1,11 +1,14 @@
+require 'dotenv'
+Dotenv.load
 # set path to app that will be used to configure unicorn,
 # note the trailing slash in this example
-@dir = "/ROR/project/sinatra/warden/"
+# @dir = "/ROR/project/sinatra/warden/"
+@dir = ENV['APP_FOLDER']
 
 worker_processes 2
 working_directory @dir
 
-user 'root', 'root'
+# user 'root', 'root'
 
 timeout 30
 
