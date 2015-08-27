@@ -5,17 +5,19 @@
   <body>
     <h1>See Image</h1>
       <% if @bresult == true %>
-      <%= will_paginate @images %>
         <% @images.each do |image| %>
-        <p>Username: <%= image.user %></p>
-        <p>Album: <%= image.album %></p>
-        <p>Filename: <%= image.filename %></p>
-        <p>Update Time: <%= image.createdate.strftime("%Y-%m-%d-%T") %></p>
-        <img src=./images/upload/<%= image.user %>/<%= image.album %>/<%= image.filename %> >
+          <% if image.user.length > 8 %>
+            <p>Username: <%= image.user %></p>
+            <p>Album: <%= image.album %></p>
+            <p>Filename: <%= image.filename %></p>
+            <p>Update Time: <%= image.createdate.strftime("%Y-%m-%d-%T") %></p>
+            <img src=./images/upload/<%= image.user %>/<%= image.album %>/<%= image.filename %> >
+          <% end %>
         <% end %>
       <% else %>
        <p>Error: <%= @return_message %></p>
       <% end %>
+      <%= will_paginate @images %>
   </body>
 </html>
 

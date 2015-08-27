@@ -340,9 +340,10 @@ class SinatraImgur < Sinatra::Base
       images << Image.all(:user => user.username, :order => [ :createdate.asc ]).last
     end
 
-    @images = WillPaginate::Collection.create(1, 10, images.length) do |pager|
-      pager.replace images
-    end
+    # @images = WillPaginate::Collection.create(1, 10, images.length) do |pager|
+    #   pager.replace images
+    # end
+    @images = images.paginate(:page => 10, :per_page => 1)
     @bresult = true unless @images.nil?
     return erb :show_all_image
   end
