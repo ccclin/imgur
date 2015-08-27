@@ -6,6 +6,10 @@ require 'bundler'
 require 'fileutils'
 require 'sinatra/logger'
 require 'dotenv'
+require 'will_paginate'
+# require 'will_paginate/data_mapper'
+require 'will_paginate/array'
+
 Bundler.require
 
 # load the Database and User model
@@ -36,7 +40,7 @@ Warden::Strategies.add(:password) do
 end
 
 class SinatraImgur < Sinatra::Base
-
+  include WillPaginate::Sinatra::Helpers
   enable :sessions
   register Sinatra::Flash
   register Sinatra::Contrib #important ==> refer to https://github.com/sinatra/sinatra-contrib
@@ -324,6 +328,23 @@ class SinatraImgur < Sinatra::Base
       logger.info("ERROR, #{return_message}")      
     end
     return erb :show_image
+  end
+
+  get '/show_all_image' do
+    @bresult = false
+    @return_message = "success!!"
+    images = []
+    users = User.all
+
+    users.each do |user|
+      images << Image.all(:user => user.username, :order => [ :createdate.asc ]).last
+    end
+
+    @images = WillPaginate::Collection.create(1, 10, images.length) do |pager|
+      pager.replace images
+    end
+    @bresult = true unless @images.nil?
+    return erb :show_all_image
   end
 
   get '/show_latest_image' do

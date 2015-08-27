@@ -3,6 +3,8 @@ require 'data_mapper'
 require 'dm-sqlite-adapter'
 require 'bcrypt'
 require 'dotenv'
+# require 'will_paginate'
+# require 'will_paginate/data_mapper'
 #require 'dm-mysql-adapter'
 
 Dotenv.load

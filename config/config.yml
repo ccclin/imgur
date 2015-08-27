@@ -1,12 +1,12 @@
 environment: production
-chdir: /Users/lin/work/imgur/
+chdir: /Users/lin/work/imgur_lin/
 address: 127.0.0.1
 user: lin
 group: staff
 port: 9000
-pid: /Users/lin/work/imgur/thin.pid
-rackup: /Users/lin/work/imgur/config.ru
-log: /Users/lin/work/imgur/thin.log
+pid: /Users/lin/work/imgur_lin/thin.pid
+rackup: /Users/lin/work/imgur_lin/config.ru
+log: /Users/lin/work/imgur_lin/thin.log
 max_conns: 1024
 timeout: 30
 max_persistent_conns: 512
