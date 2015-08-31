@@ -350,7 +350,7 @@ class SinatraImgur < Sinatra::Base
     # #   pager.replace images
     # # end
     # @images = images.paginate(:page => 10, :per_page => 1)
-    @images = LastImage.all.paginate(:page => 10, :per_page => 1)
+    @images = LastImage.all.paginate(:page => params[:page], :per_page => 10)
     @bresult = true unless @images.nil?
     return erb :show_all_image
   end
