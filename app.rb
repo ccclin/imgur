@@ -218,6 +218,11 @@ class SinatraImgur < Sinatra::Base
       :filename => image.filename,
       :createdate => image.createdate
     })
+    last_image.update(
+      :album => image.album,
+      :filename => image.filename,
+      :createdate => image.createdate
+    )
     last_image.save
     return_message = "Image #{image.path_name} Create Success!!"
     logger.info("SUCCESS, #{return_message}")
