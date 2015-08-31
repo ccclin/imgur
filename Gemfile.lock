@@ -1,7 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    addressable (2.2.8)
+    addressable (2.3.8)
     backports (3.6.4)
     bcrypt-ruby (3.0.1)
     daemons (1.2.3)
@@ -21,7 +21,7 @@ GEM
       dm-core (~> 1.2.0)
     dm-constraints (1.2.0)
       dm-core (~> 1.2.0)
-    dm-core (1.2.0)
+    dm-core (1.2.1)
       addressable (~> 2.2.6)
     dm-do-adapter (1.2.0)
       data_objects (~> 0.10.6)

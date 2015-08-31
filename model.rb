@@ -62,6 +62,16 @@ class Image
  
 end
 
+class LastImage
+  include DataMapper::Resource
+
+  property :id, Serial, key: true
+  property :user, String, length: 128, :required => true
+  property :album, String, length: 128
+  property :filename, String, length: 128, :required => true
+  property :createdate, DateTime, :required => true
+end
+
 =begin
 class AlbumItem
   include DataMapper::Resource

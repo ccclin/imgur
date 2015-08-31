@@ -7,8 +7,8 @@ require 'fileutils'
 require 'sinatra/logger'
 require 'dotenv'
 require 'will_paginate'
-# require 'will_paginate/data_mapper'
-require 'will_paginate/array'
+require 'will_paginate/data_mapper'
+# require 'will_paginate/array'
 
 Bundler.require
 
@@ -213,6 +213,9 @@ class SinatraImgur < Sinatra::Base
       file.close unless file.nil?
     end
 
+    last_image = LastImage.first_or_create(:user => image.user)
+    last_image.update(:album => image.album, :filename => image.filename, :createdate => image.createdate)
+    last_image.save
     return_message = "Image #{image.path_name} Create Success!!"
     logger.info("SUCCESS, #{return_message}")
     return { :result => FUNCTION_SUCCESS, :message => return_message }.to_json
@@ -333,17 +336,18 @@ class SinatraImgur < Sinatra::Base
   get '/show_all_image' do
     @bresult = false
     @return_message = "success!!"
-    images = []
-    users = User.all
+    # images = []
+    # users = User.all
 
-    users.each do |user|
-      images << Image.all(:user => user.username, :order => [ :createdate.asc ]).last
-    end
-
-    # @images = WillPaginate::Collection.create(1, 10, images.length) do |pager|
-    #   pager.replace images
+    # users.each do |user|
+    #   images << Image.all(:user => user.username, :order => [ :createdate.asc ]).last
     # end
-    @images = images.paginate(:page => 10, :per_page => 1)
+
+    # # @images = WillPaginate::Collection.create(1, 10, images.length) do |pager|
+    # #   pager.replace images
+    # # end
+    # @images = images.paginate(:page => 10, :per_page => 1)
+    @images = LastImage.all.paginate(:page => 10, :per_page => 1)
     @bresult = true unless @images.nil?
     return erb :show_all_image
   end
@@ -361,7 +365,8 @@ class SinatraImgur < Sinatra::Base
       return erb :show_latest_image
     end
 
-    lastImg = Image.all(:user => user, :album => album, :order => [ :createdate.asc ]).last
+    # lastImg = Image.all(:user => user, :album => album, :order => [ :createdate.asc ]).last
+    lastImg = LastImage.all(:user => user, :album => album).last
     if lastImg.nil?
       @return_message = "No image for user:#{user}, album:#{album}!!"
       logger.info("ERROR, #{@return_message}")
@@ -440,7 +445,8 @@ class SinatraImgur < Sinatra::Base
       return { :result => FUNCTION_FAILED, :message => return_message }.to_json
     end
 
-    lastImg = Image.all(:user => user, :album => album, :order => [ :createdate.asc ]).last
+    # lastImg = Image.all(:user => user, :album => album, :order => [ :createdate.asc ]).last
+    lastImg = LastImage.all(:user => user, :album => album).last
     if lastImg.nil?
       return_message = "No image for user:#{user}, album:#{album}!!"
       logger.info("ERROR, #{return_message}")
