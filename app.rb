@@ -213,8 +213,11 @@ class SinatraImgur < Sinatra::Base
       file.close unless file.nil?
     end
 
-    last_image = LastImage.first_or_create(:user => image.user)
-    last_image.update(:album => image.album, :filename => image.filename, :createdate => image.createdate)
+    last_image = LastImage.first_or_create( {:user => image.user}, {
+      :album => image.album,
+      :filename => image.filename,
+      :createdate => image.createdate
+    })
     last_image.save
     return_message = "Image #{image.path_name} Create Success!!"
     logger.info("SUCCESS, #{return_message}")
