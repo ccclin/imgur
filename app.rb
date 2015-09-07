@@ -381,9 +381,10 @@ class SinatraImgur < Sinatra::Base
       return erb :show_latest_image
     end
     
-    if File.exists?(lastImg.path_name)
+    path_name = "./images/upload/#{lastImg.user}/#{lastImg.album}/#{lastImg.filename}"
+    if File.exists?(path_name)
       @bresult = true
-      logger.info("SUCCESS, #{lastImg.path_name}")
+      logger.info("SUCCESS, #{path_name}")
       @imagetime = lastImg.createdate.strftime("%Y-%m-%d-%T")
       @user = user
       if album.nil? 
@@ -393,7 +394,7 @@ class SinatraImgur < Sinatra::Base
       end
       @filename = lastImg.filename
     else
-      @return_message = "Image file #{lastImg.path_name} not exist!!"
+      @return_message = "Image file #{path_name} not exist!!"
       lastImg.destroy
       logger.info("ERROR, #{return_message}")      
     end
@@ -426,14 +427,15 @@ class SinatraImgur < Sinatra::Base
       return { :result => FUNCTION_FAILED, :message => return_message }.to_json
     end
     
-    if File.exists?(lastImg.path_name)
-      content = File.read(lastImg.path_name)
-      logger.info("SUCCESS, #{lastImg.path_name}")
+    path_name = "./images/upload/#{lastImg.user}/#{lastImg.album}/#{lastImg.filename}"
+    if File.exists?(path_name)
+      content = File.read(path_name)
+      logger.info("SUCCESS, #{path_name}")
       # imagetime = lastImg.createdate.strftime("%Y-%m-%d-%T")
       imagetime = lastImg.createdate.strftime("%Y/%m/%d %H:%M:%S")
       return { :result => FUNCTION_SUCCESS, :imagetime => imagetime, :content => content }.to_json
     else
-      return_message = "Image file #{lastImg.path_name} not exist!!"
+      return_message = "Image file #{path_name} not exist!!"
       lastImg.destroy
       logger.info("ERROR, #{return_message}")      
       return { :result => FUNCTION_FAILED, :message => return_message }.to_json
@@ -461,11 +463,12 @@ class SinatraImgur < Sinatra::Base
       return { :result => FUNCTION_FAILED, :message => return_message }.to_json
     end
     
-    if File.exists?(lastImg.path_name)
-      logger.info("SUCCESS, #{lastImg.path_name}")
+    path_name = "./images/upload/#{lastImg.user}/#{lastImg.album}/#{lastImg.filename}"
+    if File.exists?(path_name)
+      logger.info("SUCCESS, #{path_name}")
       return { :result => FUNCTION_SUCCESS, :imageurl => "/images/upload/#{user}/#{album}/#{lastImg.filename}", :imagetime => lastImg.createdate.strftime("%Y/%m/%d %H:%M:%S") }.to_json
     else
-      return_message = "Image file #{lastImg.path_name} not exist!!"
+      return_message = "Image file #{path_name} not exist!!"
       lastImg.destroy
       logger.info("ERROR, #{return_message}")      
       return { :result => FUNCTION_FAILED, :message => return_message }.to_json
