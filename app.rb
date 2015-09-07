@@ -334,9 +334,9 @@ class SinatraImgur < Sinatra::Base
       end
       @filename = filename
     else
-      @return_message = "Image file #{lastImg.path_name} not exist!!"
+      @return_message = "Image file #{Img.path_name} not exist!!"
       Img.destroy
-      logger.info("ERROR, #{return_message}")      
+      logger.info("ERROR, #{@return_message}")
     end
     return erb :show_image
   end
@@ -381,7 +381,7 @@ class SinatraImgur < Sinatra::Base
       return erb :show_latest_image
     end
     
-    path_name = "./images/upload/#{lastImg.user}/#{lastImg.album}/#{lastImg.filename}"
+    path_name = "./public/images/upload/#{user}/#{album}/#{lastImg.filename}"
     if File.exists?(path_name)
       @bresult = true
       logger.info("SUCCESS, #{path_name}")
@@ -395,8 +395,8 @@ class SinatraImgur < Sinatra::Base
       @filename = lastImg.filename
     else
       @return_message = "Image file #{path_name} not exist!!"
-      lastImg.destroy
-      logger.info("ERROR, #{return_message}")      
+      # lastImg.destroy
+      logger.info("ERROR, #{@return_message}")
     end
     return erb :show_latest_image
 
@@ -427,7 +427,7 @@ class SinatraImgur < Sinatra::Base
       return { :result => FUNCTION_FAILED, :message => return_message }.to_json
     end
     
-    path_name = "./images/upload/#{lastImg.user}/#{lastImg.album}/#{lastImg.filename}"
+    path_name = "./public/images/upload/#{user}/#{album}/#{lastImg.filename}"
     if File.exists?(path_name)
       content = File.read(path_name)
       logger.info("SUCCESS, #{path_name}")
@@ -436,8 +436,8 @@ class SinatraImgur < Sinatra::Base
       return { :result => FUNCTION_SUCCESS, :imagetime => imagetime, :content => content }.to_json
     else
       return_message = "Image file #{path_name} not exist!!"
-      lastImg.destroy
-      logger.info("ERROR, #{return_message}")      
+      # lastImg.destroy
+      logger.info("ERROR, #{return_message}")
       return { :result => FUNCTION_FAILED, :message => return_message }.to_json
     end
 
@@ -463,13 +463,13 @@ class SinatraImgur < Sinatra::Base
       return { :result => FUNCTION_FAILED, :message => return_message }.to_json
     end
     
-    path_name = "./images/upload/#{lastImg.user}/#{lastImg.album}/#{lastImg.filename}"
+    path_name = "./public/images/upload/#{user}/#{album}/#{lastImg.filename}"
     if File.exists?(path_name)
       logger.info("SUCCESS, #{path_name}")
       return { :result => FUNCTION_SUCCESS, :imageurl => "/images/upload/#{user}/#{album}/#{lastImg.filename}", :imagetime => lastImg.createdate.strftime("%Y/%m/%d %H:%M:%S") }.to_json
     else
       return_message = "Image file #{path_name} not exist!!"
-      lastImg.destroy
+      # lastImg.destroy
       logger.info("ERROR, #{return_message}")      
       return { :result => FUNCTION_FAILED, :message => return_message }.to_json
     end
