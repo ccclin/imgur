@@ -15,7 +15,11 @@ Bundler.require
 # load the Database and User model
 require './model'
 
+# use dotenv
 Dotenv.load
+
+# use clear.rb to remove expired files
+require './clear'
 
 FUNCTION_SUCCESS = "success"
 FUNCTION_FAILED = "error"
@@ -168,7 +172,14 @@ class SinatraImgur < Sinatra::Base
       logger.info("ERROR, #{return_message}")
       return { :result => FUNCTION_FAILED, :message => return_message }.to_json
     end
-    
+
+    today = Time.now.strftime('%Y-%m-%d')
+    # remove expired files
+    if Image.all(:album => today).first.nil?
+      # puts 'runing clear'
+      Clear.new('run', IMAGE_FOLDER)
+    end
+
     #create new image & path
     image = Image.new(:image_folder => IMAGE_FOLDER, :user=> user, :album=>album, :filename=>name, :createdate=>DateTime.now)
     if image.nil?
