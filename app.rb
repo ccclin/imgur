@@ -178,6 +178,8 @@ class SinatraImgur < Sinatra::Base
     if Image.all(:album => today).first.nil?
       # puts 'runing clear'
       Clear.new('run', IMAGE_FOLDER)
+      images_delete = Image.all(:conditions => ['createdate < ?', (Time.now - 86400 * 6)])
+      images_delete.destroy
     end
 
     #create new image & path

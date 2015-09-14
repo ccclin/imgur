@@ -1,3 +1,6 @@
 /log/*
 image.log
 .DS_Store
+.ruby-version
+.env
+*.log
